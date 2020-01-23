@@ -16,9 +16,9 @@ int lastNBits(int value, int nBits);
 
 int main()
 {
-	int n = 7;
+	int n = 2;
 	//read in original
-	std::string inputFileName = "stockTree.ppm";
+	std::string inputFileName = "stockTreePlusmeme.ppm";
 	std::ifstream inFile;
 	inFile.open(inputFileName.c_str(), std::ios::in);
 
@@ -83,7 +83,8 @@ int main()
 		outFile.close();
 		delete[] pixelArray;
 
-	} else if (inputHeading == p2Heading) {
+	}
+	else if (inputHeading == p2Heading) {
 		int* pixelArray = new int[pixelCount];
 
 		for (int i = 0; i < pixelCount; i++) {
