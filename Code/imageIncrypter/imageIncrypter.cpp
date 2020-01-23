@@ -16,8 +16,9 @@ int lastNBits(int value, int nBits);
 
 int main()
 {
+	int n = 7;
 	//read in original
-	std::string inputFileName = "test.pgm";
+	std::string inputFileName = "stockTree.ppm";
 	std::ifstream inFile;
 	inFile.open(inputFileName.c_str(), std::ios::in);
 
@@ -35,10 +36,12 @@ int main()
 		return -1;
 	}
 
-	int width, height, pixelCount;
-	inFile >> width >> height;
+	int width, height, pixelCount, maxVal;
+	inFile >> width >> height >> maxVal;;
 	pixelCount = width * height;
 	std::cout << "Reading " + inputHeading + " file with width: " << width << " and height: " << height << std::endl;
+
+	maxVal = powerOf(2, n);
 
 	if (inputHeading == p3Heading) {
 		rgb* pixelArray = new rgb[pixelCount];
@@ -51,35 +54,33 @@ int main()
 
 		inFile.close();
 
-		for (int n = 1; n < 2; n++) {
-			rgb* newPixelArray = new rgb[pixelCount];
-			//modify pixelarray
-			for (int i = 0; i < pixelCount; i++) {
-				newPixelArray[i].r = lastNBits(pixelArray[i].r, n);
-				newPixelArray[i].g = lastNBits(pixelArray[i].g, n);
-				newPixelArray[i].b = lastNBits(pixelArray[i].b, n);
-			}
-			//output copy
-			std::string outputFileName = inputFileName.substr(0, inputFileName.length() - 4) + "Last" + std::to_string(n) + "Bits.ppm";
-			std::ofstream outFile;
-			outFile.open(outputFileName.c_str(), std::ios::out);
-
-			if (outFile.fail()) {
-				std::cout << "Failed to create file: " << outputFileName << std::endl;
-				return -1;
-			}
-
-			std::cout << "Writing...";
-			outFile << p3Heading << std::endl;
-			outFile << width << "	" << height << std::endl;
-
-			for (int i = 0; i < pixelCount; i++) {
-				pixel = newPixelArray[i];
-				outFile << pixel.r << std::endl << pixel.g << std::endl << pixel.b << std::endl;
-			}
-
-			outFile.close();
+		rgb* newPixelArray = new rgb[pixelCount];
+		//modify pixelarray
+		for (int i = 0; i < pixelCount; i++) {
+			newPixelArray[i].r = lastNBits(pixelArray[i].r, n);
+			newPixelArray[i].g = lastNBits(pixelArray[i].g, n);
+			newPixelArray[i].b = lastNBits(pixelArray[i].b, n);
 		}
+		//output copy
+		std::string outputFileName = inputFileName.substr(0, inputFileName.length() - 4) + "Last" + std::to_string(n) + "Bits.ppm";
+		std::ofstream outFile;
+		outFile.open(outputFileName.c_str(), std::ios::out);
+
+		if (outFile.fail()) {
+			std::cout << "Failed to create file: " << outputFileName << std::endl;
+			return -1;
+		}
+
+		std::cout << "Writing...";
+		outFile << p3Heading << std::endl;
+		outFile << width << "	" << height << std::endl << maxVal << std::endl;
+
+		for (int i = 0; i < pixelCount; i++) {
+			pixel = newPixelArray[i];
+			outFile << pixel.r << " " << pixel.g << " " << pixel.b << std::endl;
+		}
+
+		outFile.close();
 		delete[] pixelArray;
 
 	} else if (inputHeading == p2Heading) {
@@ -109,7 +110,7 @@ int main()
 
 			std::cout << "Writing...";
 			outFile << p2Heading << std::endl;
-			outFile << width << "	" << height << std::endl;
+			outFile << width << "	" << height << std::endl << maxVal << std::endl;
 
 			for (int i = 0; i < pixelCount; i++) {
 				outFile << newPixelArray[i] << std::endl;
