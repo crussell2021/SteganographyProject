@@ -60,7 +60,7 @@ int main()
 				newPixelArray[i].b = lastNBits(pixelArray[i].b, n);
 			}
 			//output copy
-			std::string outputFileName = inputFileName.substr(0, inputFileName.length() - 4) + "Last" + std::to_string(n) + "Bits.pgm";
+			std::string outputFileName = inputFileName.substr(0, inputFileName.length() - 4) + "Last" + std::to_string(n) + "Bits.ppm";
 			std::ofstream outFile;
 			outFile.open(outputFileName.c_str(), std::ios::out);
 
